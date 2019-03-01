@@ -10,6 +10,7 @@ namespace GenericControls.Models.Internal
     {
         public int PageId { get; set; }
         public string Url { get; set; }
+        public string Razor { get; set; }
         public List<IControl> Controls { get; set; }
     }
 }

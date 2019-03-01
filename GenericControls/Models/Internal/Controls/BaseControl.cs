@@ -11,8 +11,10 @@ namespace GenericControls.Models.Internal.Controls
         // public string Container { get; set; }
         public ControlType ControlType { get; set; }
         public string Classes { get; set; }
-        public string PreceedingTypes { get; set; }
+        public string Model { get; set; }
         public List<IControl> ChildControls { get; set; }
+        public int PageId { get; set; }
+
         public abstract string Render();
 
         public string RenderChildControls()

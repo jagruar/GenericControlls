@@ -5,11 +5,14 @@ using System.Threading.Tasks;
 
 namespace GenericControls.Models.Internal.Controls
 {
-    public class ModelControl : BaseControl
+    public class PropertyControl : BaseControl
     {
+        public string Name { get; set; }
+        public string Container { get; set; }
+
         public override string Render()
         {
-            return $"<div class=\"{Classes}\">{RenderChildControls()}</div>";
+            return $"<{Container} class=\"{Classes}\">@{Model}.{Name}</{Container}>";
         }
     }
 }

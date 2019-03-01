@@ -8,6 +8,6 @@ namespace GenericControls.Services
 {
     public interface IPageParser
     {
-        public Page ParsePage(string json);
+        Page ParsePage(string json);
     }
 }
