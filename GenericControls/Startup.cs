@@ -2,11 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GenericControls.Data;
+using GenericControls.Models.Internal;
+using GenericControls.Services;
+using GenericControls.Services.Repositories;
+using GenericControls.Services.ViewEngine;
+using GenericControls.Services.ViewModels;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -31,8 +39,41 @@ namespace GenericControls
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            var connection = @"Server=(localdb)\mssqllocaldb;Database=GenericControls;Trusted_Connection=True;ConnectRetryCount=0";
+            services.AddDbContext<Context>(options => options.UseSqlServer(connection));
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddTransient<IPageGenerator, PageGenerator>();
+            services.AddTransient<IPageRepository, PageRepository>();
+
+            services.AddTransient<CarViewModelService>();
+            services.AddTransient<PropertyViewModelService>();
+            services.AddTransient<Func<ViewModelServiceType, IViewModelService>>(serviceProvider => key =>
+            {
+                switch (key)
+                {
+                    case (ViewModelServiceType.Car):
+                        return serviceProvider.GetService<CarViewModelService>();
+                    case (ViewModelServiceType.Property):
+                        return serviceProvider.GetService<PropertyViewModelService>();
+                    default:
+                        throw new KeyNotFoundException();
+                }
+            });
+
+            var sp = services.BuildServiceProvider();
+
+            services.AddMvc();
+            services.Configure<RazorViewEngineOptions>(options =>
+            {
+                options.FileProviders.Add(new DatabaseFileProvider(sp.GetService<IPageRepository>()));
+            });
+
+                //SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+                //.AddViewOptions(options =>
+                //{
+                //    options.ViewEngines.Clear();
+                //    options.ViewEngines.Add(new CustomViewEngine(sp.GetService<IPageRepository>()));
+                //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,7 +98,7 @@ namespace GenericControls
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Pages}/{action=Index}/{id?}");
             });
         }
     }
