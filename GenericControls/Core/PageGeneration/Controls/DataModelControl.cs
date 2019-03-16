@@ -22,11 +22,12 @@ namespace GenericControls.Models.Internal.Controls
         /// </summary>
         public string NameSpace { get; set; }
 
-        public string PartialName { get; set; }
+        public int PartialId { get; set; }
+        public string Name { get; set; }
 
         public override string Render()
         {
-            return $"<data-partial  name=\"{PartialName}\" service-type=\"{ViewModelServiceType}\" action=\"{Method}\" />";
+            return $"<data-partial  name=\"{PartialId}\" service-type=\"{ViewModelServiceType}\" action=\"{Method}\" />";
         }
     }
 }

@@ -9,7 +9,9 @@ namespace GenericControls.Services.Repositories
 {
     public interface IPageRepository
     {
+        string GetPageWithMaster(string url);
         Page GetPage(string url);
         Page SavePage(Page page);
+        string GetPageRazor(int pageId);
     }
 }

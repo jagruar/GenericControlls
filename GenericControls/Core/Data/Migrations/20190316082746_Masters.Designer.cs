@@ -3,14 +3,16 @@ using GenericControls.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GenericControls.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20190316082746_Masters")]
+    partial class Masters
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -26,13 +28,11 @@ namespace GenericControls.Migrations
 
                     b.Property<int>("MasterPageId");
 
-                    b.Property<string>("Name");
-
                     b.Property<int>("PageType");
 
                     b.Property<string>("Razor");
 
-                    b.Property<int?>("ReservedPage");
+                    b.Property<string>("Url");
 
                     b.HasKey("PageId");
 

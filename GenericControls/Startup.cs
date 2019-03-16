@@ -65,6 +65,7 @@ namespace GenericControls
             services.AddMvc();
             services.Configure<RazorViewEngineOptions>(options =>
             {
+                options.ViewLocationFormats.Add("{0}" + RazorViewEngine.ViewExtension);
                 options.FileProviders.Add(new DatabaseFileProvider(sp.GetService<IPageRepository>()));
             });
 

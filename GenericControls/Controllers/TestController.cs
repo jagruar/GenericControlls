@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GenericControls.Data.Entities;
 using GenericControls.Models.Internal;
 using GenericControls.Models.Internal.Controls;
 using GenericControls.Services;
@@ -20,16 +21,88 @@ namespace GenericControls.Controllers
             _pageGenerator = pageGenerator;
         }
 
-        public IActionResult GeneratePage()
+        public IActionResult Main()
         {
-            _pageGenerator.GeneratePage(TestPage);
+            var masterId = _pageGenerator.GeneratePage(TestMasterPage).PageId;
+            _pageGenerator.GeneratePage(TestPage(masterId));
+            _pageGenerator.GeneratePage(NotFoundPage(masterId));
+
             return new JsonResult(1);
         }
 
-        private PageGenerationModel TestPage => new PageGenerationModel()
+        public IActionResult Partial()
         {
-            Url = "/Views/Pages/test.cshtml",
+            
+            return new JsonResult(1);
+        }
+
+        private PageGenerationModel NotFoundPage(int masterId)
+        {
+            return new PageGenerationModel()
+            {
+                Page = new Page()
+                {
+                    PageType = PageType.Reserved,
+                    ReservedPage = ReservedPage.NotFound,
+                    MasterPageId = masterId,
+                },
+                Controls = new List<IControl>()
+                {
+                    new TextControl()
+                    {
+                        Text = "Fucked it m8"
+                    }
+                }
+            };            
+        }
+
+        private PageGenerationModel TestMasterPage => new PageGenerationModel()
+        {
+            Page = new Page()
+            {
+                PageType = PageType.Master,
+                MasterPageId = 0,
+                Name = "MyMaster"
+            },
             Controls = new List<IControl>()
+            {
+                new HtmlControl()
+                {
+                    HtmlElement = "h1",
+                    ChildControls = new List<IControl>()
+                    {
+                        new TextControl()
+                        {
+                            Text = "This is from my master page"
+                        }
+                    }
+                },
+                new RenderBodyControl(),
+                new HtmlControl()
+                {
+                    HtmlElement = "h1",
+                    ChildControls = new List<IControl>()
+                    {
+                        new TextControl()
+                        {
+                            Text = "This is also from my master page"
+                        }
+                    }
+                }
+            }
+        };
+
+        private PageGenerationModel TestPage(int masterId)
+        {
+            return new PageGenerationModel()
+            {
+                Page = new Page()
+                {
+                    PageType = PageType.Main,
+                    MasterPageId = masterId,
+                    Name = "test",
+                },
+                Controls = new List<IControl>()
             {
                 new HtmlControl()
                 {
@@ -47,11 +120,11 @@ namespace GenericControls.Controllers
                     ControlType = ControlType.ListDataModel,
                     ViewModelServiceType = ViewModelServiceType.Car,
                     Method = "GetCars",
-                    PartialName = "/Views/Pages/AllCars.cshtml",
+                    Name = "All_Cars",
                     NameSpace = "GenericControls.Models.Cars",
                     Model = "Car",
                     ChildControls = new List<IControl>()
-                    {  
+                    {
                         new ModelControl()
                         {
                             ControlType = ControlType.Model,
@@ -68,7 +141,7 @@ namespace GenericControls.Controllers
                                     HtmlElement = "p",
                                     Property = "Age"
                                 }
-                            }                            
+                            }
                         },
                         new ConditionalControl()
                         {
@@ -84,7 +157,7 @@ namespace GenericControls.Controllers
                                         new TextControl()
                                         {
                                             Text = "This geezer has safe tyres"
-                                        }                                        
+                                        }
                                     }
                                 }
                             }
@@ -125,6 +198,7 @@ namespace GenericControls.Controllers
                     }
                 }
             }
-        };
+            };            
+        }
     }
 }

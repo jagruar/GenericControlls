@@ -45,7 +45,7 @@ namespace GenericControls.Services.CustomTagHelpers
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             output.TagName = null;
-            ViewEngineResult result = _viewEngine.GetView(ViewContext.ExecutingFilePath, Name, isMainPage: false);
+            ViewEngineResult result = _viewEngine.GetView(string.Empty, $"/{Name}", isMainPage: false);
             var viewBuffer = new ViewBuffer(_viewBufferScope, result.ViewName, ViewBuffer.PartialViewPageSize);
             using (var writer = new ViewBufferTextWriter(viewBuffer, Encoding.UTF8))
             {
@@ -56,6 +56,10 @@ namespace GenericControls.Services.CustomTagHelpers
 
         private object GetViewModel()
         {
+            if (ServiceType == ViewModelServiceType.None)
+            {
+                return null;
+            }
             IViewModelService modelService = _viewModelFactory(ServiceType);
             Type serviceType = modelService.GetType();
             MethodInfo method = serviceType.GetMethod(Action);

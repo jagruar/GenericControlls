@@ -9,19 +9,7 @@ namespace GenericControls.Models.Internal
 {
     public class PageGenerationModel
     {
-        public int PageId { get; set; }
-        public string Url { get; set; }
-        public string Razor { get; set; }
+        public Page Page { get; set; }
         public List<IControl> Controls { get; set; }
-
-        public Page ToPage()
-        {
-            return new Page()
-            {
-                Url = Url,
-                Razor = Razor,
-            };
-
-        }
     }
 }

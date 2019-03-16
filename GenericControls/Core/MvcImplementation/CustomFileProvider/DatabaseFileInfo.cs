@@ -1,31 +1,42 @@
-﻿using GenericControls.Data.Entities;
-using GenericControls.Services.Repositories;
+﻿using GenericControls.Services.Repositories;
 using Microsoft.Extensions.FileProviders;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace GenericControls.Services.ViewEngine
 {
     public class DatabaseFileInfo : IFileInfo
     {
-        private Page _page;
+        private const string GUID = "c01c3c6b-d3ec-4303-9416-394963a12f41";
+        private const int PATH_LENGTH = 15;
+        private const int DOT_CSHTML_LENGTH = 7;
+
+        private readonly string _page;
 
         public DatabaseFileInfo(IPageRepository pageRepository, string path)
         {
-            _page = pageRepository.GetPage(path);
+            PhysicalPath = path;
+            if (int.TryParse(path.Substring(1), out int pageId))
+            {
+                _page = pageRepository.GetPageRazor(pageId);
+            }
+            else
+            {
+                string pageName = path
+                    .Substring(0, path.Length - DOT_CSHTML_LENGTH)
+                    .Substring(PATH_LENGTH);
+                _page = pageRepository.GetPageWithMaster(pageName);
+            }
         }
 
         public bool Exists => _page != null;
 
         public long Length => long.Parse("2.0");
 
-        public string PhysicalPath => _page.Url;
+        public string PhysicalPath { get; }
 
-        public string Name => _page.Url;
+        public string Name => PhysicalPath;
 
         public DateTimeOffset LastModified => DateTimeOffset.Now;
 
@@ -33,7 +44,7 @@ namespace GenericControls.Services.ViewEngine
 
         public Stream CreateReadStream()
         {
-            return new MemoryStream(Encoding.UTF8.GetBytes(_page.Razor));
+            return new MemoryStream(Encoding.UTF8.GetBytes(_page));
         }
     }
 }

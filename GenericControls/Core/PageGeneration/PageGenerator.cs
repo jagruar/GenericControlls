@@ -33,8 +33,8 @@ namespace GenericControls.Services
                 razor.Append(control.Render());
             }
 
-            page.Razor = razor.ToString();
-            return _pageRepository.SavePage(page.ToPage());
+            page.Page.Razor = razor.ToString();
+            return _pageRepository.SavePage(page.Page);
         }
 
         /// <summary>
@@ -74,8 +74,9 @@ namespace GenericControls.Services
 
             var partial = new Page()
             {
-                Url = dataControl.PartialName,
-                Razor = razor.ToString()
+                Name = dataControl.Name,
+                Razor = razor.ToString(),
+                PageType = PageType.Partial                
             };
 
             return _pageRepository.SavePage(partial);            
@@ -120,7 +121,7 @@ namespace GenericControls.Services
                 {
                     if (control.ControlType == ControlType.DataModel || control.ControlType == ControlType.ListDataModel)
                     {
-                        ((DataModelControl)control).PartialName = GeneratePartialPage((DataModelControl)control).Url;
+                        ((DataModelControl)control).PartialId = GeneratePartialPage((DataModelControl)control).PageId;
                     }
                     else
                     {
