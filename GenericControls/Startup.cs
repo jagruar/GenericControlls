@@ -1,24 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using GenericControls.Data;
-using GenericControls.Models.Internal;
-using GenericControls.Services;
-using GenericControls.Services.Repositories;
-using GenericControls.Services.ViewEngine;
-using GenericControls.Services.ViewModels;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using PortalCore.DataAccess;
+using PortalCore.DataAccess.Internal;
+using PortalCore.Interfaces.Internal;
+using PortalCore.Interfaces.Internal.DataAccess;
+using PortalCore.Interfaces.Portal;
+using PortalCore.Models.Internal.Types;
+using PortalCore.Portal.Mvc.FileProviders;
+using PortalCore.Services.Internal.Pages;
+using PortalCore.Services.ViewModels.Buildings;
+using PortalCore.Services.ViewModels.Vehicles;
+using System;
+using System.Collections.Generic;
 
-namespace GenericControls
+namespace PortalCore.Portal
 {
     public class Startup
     {
@@ -39,14 +39,20 @@ namespace GenericControls
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            var connection = @"Server=(localdb)\mssqllocaldb;Database=GenericControls;Trusted_Connection=True;ConnectRetryCount=0";
-            services.AddDbContext<Context>(options => options.UseSqlServer(connection));
+            services.AddDbContext<PagesContext>(
+                options =>
+                {
+                    options.UseSqlServer(
+                        Configuration.GetConnectionString("PortalCore_Pages"),
+                        sqlServerOptions => sqlServerOptions.MigrationsAssembly("PortalCore.DataAccess"));
+                });
+
 
             services.AddTransient<IPageGenerator, PageGenerator>();
             services.AddTransient<IPageRepository, PageRepository>();
 
             services.AddTransient<CarViewModelService>();
-            services.AddTransient<PropertyViewModelService>();
+            services.AddTransient<HouseViewModelService>();
             services.AddTransient<Func<ViewModelServiceType, IViewModelService>>(serviceProvider => key =>
             {
                 switch (key)
@@ -54,7 +60,7 @@ namespace GenericControls
                     case (ViewModelServiceType.Car):
                         return serviceProvider.GetService<CarViewModelService>();
                     case (ViewModelServiceType.Property):
-                        return serviceProvider.GetService<PropertyViewModelService>();
+                        return serviceProvider.GetService<HouseViewModelService>();
                     default:
                         throw new KeyNotFoundException();
                 }
