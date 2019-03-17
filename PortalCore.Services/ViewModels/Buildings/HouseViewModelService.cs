@@ -1,4 +1,5 @@
 ﻿using PortalCore.Interfaces.Portal;
+using PortalCore.Models.Internal.Types.Identification;
 using PortalCore.Models.ViewModels.Buildings;
 using System.Collections.Generic;
 
@@ -6,6 +7,8 @@ namespace PortalCore.Services.ViewModels.Buildings
 {
     public class HouseViewModelService : IViewModelService
     {
+        public ModelId ModelId => ModelId.House; 
+
         public House GetHouse()
         {
             return new House()

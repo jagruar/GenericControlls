@@ -6,6 +6,5 @@
         Full = 2,
         Partial = 3,
         Reserved = 4,
-        Data = 5,
     }
 }

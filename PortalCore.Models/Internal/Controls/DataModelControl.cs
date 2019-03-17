@@ -1,4 +1,5 @@
 ﻿using PortalCore.Models.Internal.Types;
+using PortalCore.Models.Internal.Types.Identification;
 
 namespace PortalCore.Models.Internal.Controls
 {
@@ -7,7 +8,7 @@ namespace PortalCore.Models.Internal.Controls
         /// <summary>
         /// Used to identify the service for retieving the components data
         /// </summary>
-        public ViewModelServiceType ViewModelServiceType { get; set; }
+        public ModelId ModelId { get; set; }
 
         /// <summary>
         /// Used to identify the method for retieving the components data
@@ -24,7 +25,7 @@ namespace PortalCore.Models.Internal.Controls
 
         public override string Render()
         {
-            return $"<data-partial  name=\"{PartialId}\" service-type=\"{ViewModelServiceType}\" action=\"{Method}\" />";
+            return $"<data-partial  partial-id=\"{PartialId}\" service-type=\"{ModelId}\" action=\"{Method}\" />";
         }
     }
 }

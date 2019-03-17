@@ -4,6 +4,7 @@ using PortalCore.Models.Internal.Controls;
 using PortalCore.Models.Internal.Entites;
 using PortalCore.Models.Internal.Pages;
 using PortalCore.Models.Internal.Types;
+using PortalCore.Models.Internal.Types.Identification;
 using System.Collections.Generic;
 
 namespace PortalCore.Portal.Controllers
@@ -35,7 +36,7 @@ namespace PortalCore.Portal.Controllers
             {
                 Page = new Page()
                 {
-                    PageType = PageType.Data,
+                    PageType = PageType.Partial,
                     MasterPageId = masterId,
                     Name = "mydatapage",
                     Namespace = "PortalCore.Models.ViewModels.Vehicles",
@@ -64,7 +65,7 @@ namespace PortalCore.Portal.Controllers
                     new LinkControl()
                     {
                         Text = "Backto the garage",
-                        ViewModelService = ViewModelServiceType.None,
+                        ViewModelService = ModelId.None,
                         View = "thegarage"
                     },
                 }
@@ -182,7 +183,7 @@ namespace PortalCore.Portal.Controllers
                 new DataModelControl()
                 {
                     ControlType = ControlType.ListDataModel,
-                    ViewModelServiceType = ViewModelServiceType.Car,
+                    ModelId = ModelId.Car,
                     Method = "GetCars",
                     Name = "All Cars",
                     Namespace = "PortalCore.Models.ViewModels.Vehicles",
@@ -198,7 +199,7 @@ namespace PortalCore.Portal.Controllers
                             {
                                 new LinkControl()
                                 {
-                                    ViewModelService = ViewModelServiceType.Car,
+                                    ViewModelService = ModelId.Car,
                                     Method = "Mine",
                                     PrimaryKey = "Name",
                                     View = "mydatapage",

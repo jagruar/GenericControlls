@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortalCore.Services", "Port
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortalCore.DataAccess", "PortalCore.DataAccess\PortalCore.DataAccess.csproj", "{149FB14C-3792-4CE6-A80A-D9A39CD0286F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PortalCore.Admin", "PortalCore.Admin\PortalCore.Admin.csproj", "{9AD65F2B-5AB8-44FD-8A52-3609F697438E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{149FB14C-3792-4CE6-A80A-D9A39CD0286F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{149FB14C-3792-4CE6-A80A-D9A39CD0286F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{149FB14C-3792-4CE6-A80A-D9A39CD0286F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9AD65F2B-5AB8-44FD-8A52-3609F697438E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AD65F2B-5AB8-44FD-8A52-3609F697438E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AD65F2B-5AB8-44FD-8A52-3609F697438E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AD65F2B-5AB8-44FD-8A52-3609F697438E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

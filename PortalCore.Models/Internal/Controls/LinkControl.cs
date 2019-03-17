@@ -1,4 +1,5 @@
 ﻿using PortalCore.Models.Internal.Types;
+using PortalCore.Models.Internal.Types.Identification;
 using System;
 using System.Text;
 
@@ -10,7 +11,7 @@ namespace PortalCore.Models.Internal.Controls
         public bool OpenNewPage { get; set; }
         public string ExternalUrl { get; set; }
 
-        public ViewModelServiceType ViewModelService { get; set; }
+        public ModelId ViewModelService { get; set; }
         public string Method { get; set; }
         public string View { get; set; }
 
@@ -33,7 +34,7 @@ namespace PortalCore.Models.Internal.Controls
             {
                 return ExternalUrl;
             }
-            else if (ViewModelService == ViewModelServiceType.None)
+            else if (ViewModelService == ModelId.None)
             {
                 return $"~/{View}";
             }

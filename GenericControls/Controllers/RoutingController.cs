@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PortalCore.Interfaces.Portal;
 using PortalCore.Models.Internal.Types;
+using PortalCore.Models.Internal.Types.Identification;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -10,11 +11,11 @@ namespace PortalCore.Portal.Controllers
     [Route("")]
     public class RoutingController : Controller
     {
-        private readonly Func<ViewModelServiceType, IViewModelService> _viewModelFactory;
+        private readonly Func<ModelId, IViewModelService> _viewModelServiceFactory;
 
-        public RoutingController(Func<ViewModelServiceType, IViewModelService> viewModelFactory)
+        public RoutingController(Func<ModelId, IViewModelService> viewModelFactory)
         {
-            _viewModelFactory = viewModelFactory;
+            _viewModelServiceFactory = viewModelFactory;
         }
 
         [HttpGet("/{url}")]
@@ -26,7 +27,7 @@ namespace PortalCore.Portal.Controllers
         [HttpGet("/{serviceType}/{method}")]
         public IActionResult DataView(
             [FromQuery]string view, 
-            ViewModelServiceType serviceType,
+            ModelId serviceType,
             string method,
             [FromQuery]int? primaryId,
             [FromQuery]int? secondaryId,
@@ -45,7 +46,7 @@ namespace PortalCore.Portal.Controllers
             
             try
             {
-                IViewModelService modelService = _viewModelFactory(serviceType);
+                IViewModelService modelService = _viewModelServiceFactory(serviceType);
                 Type typeOfService = modelService.GetType();
                 MethodInfo methodInfo = typeOfService.GetMethod(method);
                 object viewModel = methodInfo.Invoke(modelService, parametersArray);

@@ -28,7 +28,7 @@ namespace PortalCore.Services.Internal.Pages
 
             var razor = new StringBuilder();
 
-            if (page.Page.PageType == PageType.Data)
+            if (page.Page.PageType == PageType.Partial)
             {
                 razor.AppendLine($"@model {page.Page.Namespace}.{page.Page.Model}");
                 NameModels(page.Controls, "Model");

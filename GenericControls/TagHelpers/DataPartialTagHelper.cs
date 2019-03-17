@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 using PortalCore.Interfaces.Internal.DataAccess;
 using PortalCore.Interfaces.Portal;
 using PortalCore.Models.Internal.Types;
+using PortalCore.Models.Internal.Types.Identification;
 using System;
 using System.IO;
 using System.Reflection;
@@ -16,13 +17,13 @@ namespace PortalCore.Portal.TagHelpers
 {
     public class DataPartialTagHelper : TagHelper
     {
-        private readonly Func<ViewModelServiceType, IViewModelService> _viewModelFactory;
+        private readonly Func<ModelId, IViewModelService> _viewModelFactory;
         private readonly IPageRepository _pageRepository;
         private readonly ICompositeViewEngine _viewEngine;
         private readonly IViewBufferScope _viewBufferScope;
 
-        public string Name { get; set; }
-        public ViewModelServiceType ServiceType { get; set; }
+        public string PageId { get; set; }
+        public ModelId ModelType { get; set; }
         public string Action { get; set; }
 
         [HtmlAttributeNotBound]
@@ -30,7 +31,7 @@ namespace PortalCore.Portal.TagHelpers
         public ViewContext ViewContext { get; set; }
 
         public DataPartialTagHelper(
-            Func<ViewModelServiceType, IViewModelService> viewModelFactory,
+            Func<ModelId, IViewModelService> viewModelFactory,
             IPageRepository pageRepository,
             ICompositeViewEngine viewEngine,
             IViewBufferScope viewBufferScope)
@@ -45,7 +46,7 @@ namespace PortalCore.Portal.TagHelpers
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             output.TagName = null;
-            ViewEngineResult result = _viewEngine.GetView(string.Empty, $"/{Name}", isMainPage: false);
+            ViewEngineResult result = _viewEngine.GetView(string.Empty, $"/{PageId}", isMainPage: false);
             var viewBuffer = new ViewBuffer(_viewBufferScope, result.ViewName, ViewBuffer.PartialViewPageSize);
             using (var writer = new ViewBufferTextWriter(viewBuffer, Encoding.UTF8))
             {
@@ -56,11 +57,11 @@ namespace PortalCore.Portal.TagHelpers
 
         private object GetViewModel()
         {
-            if (ServiceType == ViewModelServiceType.None)
+            if (ModelType == ModelId.None)
             {
                 return null;
             }
-            IViewModelService modelService = _viewModelFactory(ServiceType);
+            IViewModelService modelService = _viewModelFactory(ModelType);
             Type serviceType = modelService.GetType();
             MethodInfo method = serviceType.GetMethod(Action);
             return method.Invoke(modelService, null);

@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PortalCore.DataAccess\PortalCore.DataAccess.csproj" />
+    <ProjectReference Include="..\PortalCore.Interfaces\PortalCore.Interfaces.csproj" />
+    <ProjectReference Include="..\PortalCore.Models\PortalCore.Models.csproj" />
+    <ProjectReference Include="..\PortalCore.Services\PortalCore.Services.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,9 +1,10 @@
 ﻿using PortalCore.Models.Internal.Attributes;
+using PortalCore.Models.Internal.Types.Identification;
 
 namespace PortalCore.Models.ViewModels.Vehicles
 {
-    [ViewModel("a613e646-190d-4ed5-8b9d-0a4cd719257d")]
-    public class DriverViewModel
+    [Model(ModelId.Driver, "Driver")]
+    public class DriverViewModel : IViewModel
     {
         public string Name { get; set; }
         public int Age { get; set; }

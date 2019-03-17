@@ -1,9 +1,10 @@
 ﻿using PortalCore.Models.Internal.Attributes;
+using PortalCore.Models.Internal.Types.Identification;
 
 namespace PortalCore.Models.ViewModels.Vehicles
 {
-    [ViewModel("b46f2f2c-c6d8-4952-8346-177b89e0739d")]
-    public class TyreViewModel
+    [Model(ModelId.Tyre, "Tyre")]
+    public class TyreViewModel : IViewModel
     {
         public int Pressure { get; set; }
     }

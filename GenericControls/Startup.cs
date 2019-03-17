@@ -11,6 +11,7 @@ using PortalCore.Interfaces.Internal;
 using PortalCore.Interfaces.Internal.DataAccess;
 using PortalCore.Interfaces.Portal;
 using PortalCore.Models.Internal.Types;
+using PortalCore.Models.Internal.Types.Identification;
 using PortalCore.Portal.Mvc.FileProviders;
 using PortalCore.Services.Internal.Pages;
 using PortalCore.Services.ViewModels.Buildings;
@@ -51,15 +52,15 @@ namespace PortalCore.Portal
             services.AddTransient<IPageGenerator, PageGenerator>();
             services.AddTransient<IPageRepository, PageRepository>();
 
-            services.AddTransient<CarViewModelService>();
-            services.AddTransient<HouseViewModelService>();
-            services.AddTransient<Func<ViewModelServiceType, IViewModelService>>(serviceProvider => key =>
+            services.AddTransient<IViewModelService, CarViewModelService>();
+            services.AddTransient<IViewModelService, HouseViewModelService>();
+            services.AddTransient<Func<ModelId, IViewModelService>>(serviceProvider => key =>
             {
                 switch (key)
                 {
-                    case (ViewModelServiceType.Car):
+                    case (ModelId.Car):
                         return serviceProvider.GetService<CarViewModelService>();
-                    case (ViewModelServiceType.Property):
+                    case (ModelId.House):
                         return serviceProvider.GetService<HouseViewModelService>();
                     default:
                         throw new KeyNotFoundException();

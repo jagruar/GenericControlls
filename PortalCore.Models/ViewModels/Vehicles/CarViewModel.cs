@@ -1,20 +1,14 @@
 ﻿using PortalCore.Models.Internal.Attributes;
+using PortalCore.Models.Internal.Types.Identification;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace PortalCore.Models.ViewModels.Vehicles
 {
-    // This exposes a data control with input parameter
-    //[DataControl("ViewModelServiceType.Car", ""GetCar", "Get Car for Current User")]
-    //[Parameter("GetCar", "Maximum Cars",ParameterType.Int)]
-    //
-    // This exposes a list control
-    //[ListDataControl("ViewModelServiceType.Car", ""GetCars")]
-    //
     // This exposes a javascrip function accessible within the control
     //[Function("deleteCar", "Delete Car", "Will remove this car from the database")]
-    [ViewModel("cf187bab-6f09-4af1-af07-e94ac56a0bf6")]
+    [Model(ModelId.Car, "Car")]
     public class CarViewModel : IViewModel
     {
         public int CarId { get; set; }
@@ -23,21 +17,22 @@ namespace PortalCore.Models.ViewModels.Vehicles
         //[LoadFunction("makeCountdown")]
         //[Paramater("Time Format", "TimeTillMot", ParameterType.String)]
         //[Paramater("Use a countdown?", "TimeTillMot", ParameterType.Bool)]
+        [Property(PropertyId.Car_TimeTillMot, "Time till MOT is due")]
         public DateTime TimeTillMot { get; set; }
 
-        [Property]
+        [Property(PropertyId.Car_NumberPlate, "Number Plate")]
         public string NumberPlate { get; set; }
 
-        [Model("a613e646-190d-4ed5-8b9d-0a4cd719257d")]
+        [Property(PropertyId.Car_Driver, ModelId.Driver)]
         public DriverViewModel Driver { get; set; }
 
-        [List]
+        [Property(PropertyId.Car_Passengers, IsList = true)]
         public List<string> Passengers { get; set; }
 
-        [ModelList("b46f2f2c-c6d8-4952-8346-177b89e0739d")]
+        [Property(PropertyId.Car_Tyres, ModelId.Tyre, IsList = true)]
         public List<TyreViewModel> Tyres { get; set; }
 
-        [Conditional("Has Safe Tyres")]
+        [Conditional(ConditionalId.Car_IsSafe, "Is this car safe?", "Are all the tyres on this car at a pressure greater than 22?")]
         public bool IsSafe()
         {
             return !Tyres.Any(t => t.Pressure < 22);
