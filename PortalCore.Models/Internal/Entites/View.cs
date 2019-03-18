@@ -5,5 +5,7 @@
         public int ViewId { get; set; }
         public int PageId { get; set; }
         public string Razor { get; set; }
+
+        public Page Page { get; set; }
     }
 }

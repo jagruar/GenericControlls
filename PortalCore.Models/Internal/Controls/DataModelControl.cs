@@ -25,7 +25,7 @@ namespace PortalCore.Models.Internal.Controls
 
         public override string Render()
         {
-            return $"<data-partial  partial-id=\"{PartialId}\" service-type=\"{ModelId}\" action=\"{Method}\" />";
+            return $"<data-partial  partial-id=\"{PartialId}\" model-type=\"{ModelId}\" action=\"{Method}\" />";
         }
     }
 }

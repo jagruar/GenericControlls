@@ -39,8 +39,7 @@ namespace PortalCore.Portal.Controllers
                     PageType = PageType.Partial,
                     MasterPageId = masterId,
                     Name = "mydatapage",
-                    Namespace = "PortalCore.Models.ViewModels.Vehicles",
-                    Model = "CarViewModel",
+                    ModelId = ModelId.Car
                 },
                 Controls = new List<IControl>()
                 {

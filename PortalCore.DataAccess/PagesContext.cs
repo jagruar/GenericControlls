@@ -17,5 +17,18 @@ namespace PortalCore.DataAccess
             : base(options)
         {
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Property>()
+                .HasOne(p => p.Model)
+                .WithMany(m => m.ChildProperties)
+                .HasForeignKey(p => p.ModelId);
+
+            modelBuilder.Entity<Property>()
+                .HasOne(p => p.ChildModel)
+                .WithMany(m => m.ParentProperties)
+                .HasForeignKey(p => p.ChildModelId);
+        }
     }
 }

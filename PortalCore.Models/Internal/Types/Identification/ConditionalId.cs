@@ -6,6 +6,6 @@ namespace PortalCore.Models.Internal.Types.Identification
 {
     public enum ConditionalId
     {
-        Car_IsSafe = 1
+        Car_IsSafe = 101
     }
 }

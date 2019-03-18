@@ -1,4 +1,5 @@
 ﻿using PortalCore.Models.Internal.Attributes;
+using PortalCore.Models.Internal.Types;
 using PortalCore.Models.Internal.Types.Identification;
 using System;
 using System.Collections.Generic;
@@ -17,16 +18,16 @@ namespace PortalCore.Models.ViewModels.Vehicles
         //[LoadFunction("makeCountdown")]
         //[Paramater("Time Format", "TimeTillMot", ParameterType.String)]
         //[Paramater("Use a countdown?", "TimeTillMot", ParameterType.Bool)]
-        [Property(PropertyId.Car_TimeTillMot, "Time till MOT is due")]
+        [Property(PropertyId.Car_TimeTillMot, BasicType.DateTime, "Time till MOT is due")]
         public DateTime TimeTillMot { get; set; }
 
-        [Property(PropertyId.Car_NumberPlate, "Number Plate")]
+        [Property(PropertyId.Car_NumberPlate, BasicType.String, "Number Plate")]
         public string NumberPlate { get; set; }
 
         [Property(PropertyId.Car_Driver, ModelId.Driver)]
         public DriverViewModel Driver { get; set; }
 
-        [Property(PropertyId.Car_Passengers, IsList = true)]
+        [Property(PropertyId.Car_Passengers, BasicType.String, IsList = true)]
         public List<string> Passengers { get; set; }
 
         [Property(PropertyId.Car_Tyres, ModelId.Tyre, IsList = true)]

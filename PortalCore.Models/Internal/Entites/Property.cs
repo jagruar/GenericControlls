@@ -1,4 +1,5 @@
-﻿using PortalCore.Models.Internal.Types.Identification;
+﻿using PortalCore.Models.Internal.Types;
+using PortalCore.Models.Internal.Types.Identification;
 
 namespace PortalCore.Models.Internal.Entites
 {
@@ -6,6 +7,7 @@ namespace PortalCore.Models.Internal.Entites
     {
         public PropertyId PropertyId { get; set; }
         public string DisplayName { get; set; }
+        public BasicType? Type { get; set; }
         public bool IsList { get; set; }
 
         public ModelId ModelId { get; set; }

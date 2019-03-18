@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PortalCore.DataAccess;
 
 namespace PortalCore.DataAccess.Migrations
 {
     [DbContext(typeof(PagesContext))]
-    partial class PagesContextModelSnapshot : ModelSnapshot
+    [Migration("20190318213157_models3")]
+    partial class models3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -81,9 +83,13 @@ namespace PortalCore.DataAccess.Migrations
 
                     b.Property<string>("DisplayName");
 
+                    b.Property<int?>("ModelId1");
+
                     b.Property<string>("Namespace");
 
                     b.HasKey("ModelId");
+
+                    b.HasIndex("ModelId1");
 
                     b.ToTable("Models");
                 });
@@ -190,6 +196,13 @@ namespace PortalCore.DataAccess.Migrations
                         .WithMany("Endpoints")
                         .HasForeignKey("ModelId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("PortalCore.Models.Internal.Entites.Model", b =>
+                {
+                    b.HasOne("PortalCore.Models.Internal.Entites.Model")
+                        .WithMany("Models")
+                        .HasForeignKey("ModelId1");
                 });
 
             modelBuilder.Entity("PortalCore.Models.Internal.Entites.Parameter", b =>

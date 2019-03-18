@@ -7,9 +7,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using PortalCore.DataAccess;
+using PortalCore.DataAccess.Internal;
 using PortalCore.Interfaces.Internal;
+using PortalCore.Interfaces.Internal.DataAccess;
 using PortalCore.Interfaces.Portal;
 using PortalCore.Models.ViewModels;
 using PortalCore.Models.ViewModels.Vehicles;
@@ -38,9 +42,16 @@ namespace PortalCore.Admin
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddDbContext<PagesContext>(
+                options =>
+                {
+                    options.UseSqlServer(
+                        Configuration.GetConnectionString("PortalCore_Pages"),
+                        sqlServerOptions => sqlServerOptions.MigrationsAssembly("PortalCore.DataAccess"));
+                });
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            services.AddTransient<IEntityBuilder, EntityBuilder>();
 
             services.AddTransient<IViewModel, CarViewModel>();
             services.AddTransient<IViewModel, DriverViewModel>();
@@ -48,7 +59,10 @@ namespace PortalCore.Admin
 
             services.AddTransient<IViewModelService, CarViewModelService>();
             services.AddTransient<IViewModelService, HouseViewModelService>();
+
+            services.AddTransient<IEntityBuilder, EntityBuilder>();
             services.AddTransient<IInstallService, InstallService>();
+            services.AddTransient<IModelRepository, ModelRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

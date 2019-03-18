@@ -22,7 +22,7 @@ namespace PortalCore.Portal.TagHelpers
         private readonly ICompositeViewEngine _viewEngine;
         private readonly IViewBufferScope _viewBufferScope;
 
-        public string PageId { get; set; }
+        public string PartialId { get; set; }
         public ModelId ModelType { get; set; }
         public string Action { get; set; }
 
@@ -46,7 +46,7 @@ namespace PortalCore.Portal.TagHelpers
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             output.TagName = null;
-            ViewEngineResult result = _viewEngine.GetView(string.Empty, $"/{PageId}", isMainPage: false);
+            ViewEngineResult result = _viewEngine.GetView(string.Empty, $"/{PartialId}", isMainPage: false);
             var viewBuffer = new ViewBuffer(_viewBufferScope, result.ViewName, ViewBuffer.PartialViewPageSize);
             using (var writer = new ViewBufferTextWriter(viewBuffer, Encoding.UTF8))
             {

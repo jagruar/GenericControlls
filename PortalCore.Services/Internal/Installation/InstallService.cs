@@ -21,7 +21,6 @@ namespace PortalCore.Services.Internal.Installation
         private readonly IModelRepository _modelRepository;
 
         private List<Model> _models { get; set; }
-        private Dictionary<ModelId, List<Endpoint>> _endpoints { get; set; }
 
         public InstallService(
             IEnumerable<IViewModel> models,
@@ -38,18 +37,38 @@ namespace PortalCore.Services.Internal.Installation
 
         public void InstallModels()
         {
-            FindEndpoints();
-
+            // install or update models
             foreach (IViewModel viewModel in _viewModels)
             {
                 ModelAttribute modelAttribute = GetAttribute<ModelAttribute>(viewModel);
                 Model model = _entityBuilder.BuildModel(modelAttribute);
                 model.Namespace = viewModel.GetType().Namespace;
-                model.Endpoints = _endpoints[model.ModelId];
-                model.Properties = GetProperties(model.ModelId, viewModel);
-                model.Conditionals = GetConditionals(model.ModelId, viewModel);
+                _modelRepository.SaveModel(model);
+            }
 
-                _modelRepository.Save(model);
+            foreach (IViewModel viewModel in _viewModels)
+            {
+                ModelId modelId = GetAttribute<ModelAttribute>(viewModel).ModelId;
+                _modelRepository.SaveConditionals(GetConditionals(modelId, viewModel));
+                _modelRepository.SaveProperties(GetProperties(modelId, viewModel));
+            }
+
+            foreach (IViewModelService service in _services)
+            {
+                MethodInfo[] methods = service.GetType().GetMethods();
+                foreach (MethodInfo method in methods)
+                {
+                    if (TryGetAttribute(method, out EndpointAttribute attribute))
+                    {
+                        Endpoint endpoint = _entityBuilder.BuildEndpoint(method.Name, attribute);
+                        endpoint.ModelId = service.ModelId;
+                        _modelRepository.SaveEndpoint(endpoint);
+
+                        List<Parameter> parameters = GetAttributes<ParameterAttribute>(method)
+                            .Select(p => _entityBuilder.BuildParameter(endpoint.EndpointId, p)).ToList();
+                        _modelRepository.SaveParameters(parameters);
+                    }
+                }
             }
         }
 
@@ -61,7 +80,7 @@ namespace PortalCore.Services.Internal.Installation
             {
                 if (TryGetAttribute(method, out ConditionalAttribute attribute))
                 {
-                    conditionals.Add(_entityBuilder.BuildConditional(modelId, attribute));
+                    conditionals.Add(_entityBuilder.BuildConditional(modelId,  attribute));
                 }
             }
             return conditionals;
@@ -80,42 +99,16 @@ namespace PortalCore.Services.Internal.Installation
             {
                 if (TryGetAttribute(memberInfo, out PropertyAttribute attribute))
                 {
-                    
-                    properties.Add(_entityBuilder.BuildProperty(modelId, attribute));
+                    properties.Add(_entityBuilder.BuildProperty(modelId, attribute, memberInfo.Name));
                 }
             }
             return properties;
         }
 
-        private void FindEndpoints()
-        {
-            foreach (IViewModelService service in _services)
-            {
-                MethodInfo[] methods = service.GetType().GetMethods();
-                foreach (MethodInfo method in methods)
-                {
-                    if (TryGetAttribute(method, out EndpointAttribute attribute))
-                    {
-                        Endpoint endpoint = _entityBuilder.BuildEndpoint(service.ModelId, method.Name, attribute);
-                        _endpoints[service.ModelId].Add(_entityBuilder.BuildEndpoint(service.ModelId, method.Name, attribute));
-                    }
-                }
-            }
-        }
-
-
         private bool TryGetAttribute<T>(MemberInfo method, out T attribute) where T : Attribute
         {
-            try
-            {
-                attribute = (T)(Attribute.GetCustomAttribute(method, typeof(T)));
-                return true;
-            }
-            catch
-            {
-                attribute = null;
-                return false;
-            }            
+            attribute = (T)Attribute.GetCustomAttribute(method, typeof(T));
+            return attribute != null;          
         }
 
         private T GetAttribute<T>(object o) where T : Attribute
@@ -127,6 +120,12 @@ namespace PortalCore.Services.Internal.Installation
         {
             var attributes = Attribute.GetCustomAttributes(o.GetType(), typeof(T));
             return attributes.Select(a => (T)a);        
+        }
+
+        private IEnumerable<T> GetAttributes<T>(MemberInfo m) where T : Attribute
+        {
+            var attributes = Attribute.GetCustomAttributes(m.GetType(), typeof(T));
+            return attributes.Select(a => (T)a);
         }
     }
 }

@@ -18,6 +18,8 @@ namespace PortalCore.Models.Internal.Attributes
         /// </summary>
         public ModelId? ChildModelId { get; set; }
 
+        public BasicType? Type { get; set; }
+
         public bool IsList { get; set; }
 
         /// <summary>
@@ -33,10 +35,10 @@ namespace PortalCore.Models.Internal.Attributes
             IsList = isList;
         }
 
-        public PropertyAttribute(PropertyId propertyId, string displayName = null, bool isList = false)
+        public PropertyAttribute(PropertyId propertyId, BasicType basicType, string displayName = null, bool isList = false)
         {
             PropertyId = propertyId;
-            ChildModelId = null;
+            Type = basicType;
             DisplayName = displayName;
             IsList = isList;
         }

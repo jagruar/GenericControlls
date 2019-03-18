@@ -6,7 +6,8 @@ namespace PortalCore.Models.Internal.Types.Identification
 {
     public enum EndpointId
     {
-        Car_GetCars = 1,
-        Car_Mine = 2
+        // Car 100
+        Car_GetCars = 101,
+        Car_Mine = 102
     }
 }

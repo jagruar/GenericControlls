@@ -10,8 +10,16 @@ namespace PortalCore.Models.Internal.Entites
         public string Namespace { get; set; }
 
         public IEnumerable<Endpoint> Endpoints { get; set; }
-        public IEnumerable<Property> Properties { get; set; }
+
+        /// <summary>
+        /// Properties on this model
+        /// </summary>
+        public IEnumerable<Property> ChildProperties { get; set; }
+
+        /// <summary>
+        /// Properties on other models where this is the type
+        /// </summary>
+        public IEnumerable<Property> ParentProperties { get; set; }
         public IEnumerable<Conditional> Conditionals { get; set; }
-        // list endpoints, properties
     }
 }

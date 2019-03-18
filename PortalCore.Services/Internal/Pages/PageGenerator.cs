@@ -30,7 +30,7 @@ namespace PortalCore.Services.Internal.Pages
 
             if (page.Page.PageType == PageType.Partial)
             {
-                razor.AppendLine($"@model {page.Page.Namespace}.{page.Page.Model}");
+                //razor.AppendLine($"@model {page.Page.Namespace}.{page.Page.Model}");
                 NameModels(page.Controls, "Model");
             }
 

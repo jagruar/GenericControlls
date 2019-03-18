@@ -52,8 +52,8 @@ namespace PortalCore.Portal
             services.AddTransient<IPageGenerator, PageGenerator>();
             services.AddTransient<IPageRepository, PageRepository>();
 
-            services.AddTransient<IViewModelService, CarViewModelService>();
-            services.AddTransient<IViewModelService, HouseViewModelService>();
+            services.AddTransient<CarViewModelService>();
+            services.AddTransient<HouseViewModelService>();
             services.AddTransient<Func<ModelId, IViewModelService>>(serviceProvider => key =>
             {
                 switch (key)

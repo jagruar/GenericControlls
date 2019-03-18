@@ -2,29 +2,27 @@
 using PortalCore.Models.Internal.Attributes;
 using PortalCore.Models.Internal.Entites;
 using PortalCore.Models.Internal.Types.Identification;
-using System;
 
 namespace PortalCore.Services.Internal.Installation
 {
     public class EntityBuilder : IEntityBuilder
     {
-        public Conditional BuildConditional(ModelId modelId,  ConditionalAttribute attribute)
+        public Conditional BuildConditional(ModelId modelId, ConditionalAttribute attribute)
         {
             return new Conditional()
             {
-                ConditionalId = attribute.ConditionalId,
                 ModelId = modelId,
+                ConditionalId = attribute.ConditionalId,
                 DisplayName = attribute.DisplayName,
                 Description = attribute.Description
             };
         }
 
-        public Endpoint BuildEndpoint(ModelId modelId, string methodName, EndpointAttribute attribute)
+        public Endpoint BuildEndpoint(string methodName, EndpointAttribute attribute)
         {
             return new Endpoint()
             {
                 EndpointId = attribute.EndpointId,
-                ModelId = modelId,
                 DisplayName = attribute.DisplayName,
                 Description = attribute.Description,
                 IsList = attribute.IsList,
@@ -41,13 +39,25 @@ namespace PortalCore.Services.Internal.Installation
             };
         }
 
-        public Property BuildProperty(ModelId modelId, PropertyAttribute attribute)
+        public Parameter BuildParameter(EndpointId endpointId, ParameterAttribute attribute)
+        {
+            return new Parameter()
+            {
+                EndpointId = endpointId,
+                ParameterId = attribute.ParameterId,
+                DisplayName = attribute.DisplayName,
+                Type  = attribute.Type,
+            };
+        }
+
+        public Property BuildProperty(ModelId modelId, PropertyAttribute attribute, string propertyName)
         {
             return new Property()
             {
-                PropertyId = attribute.PropertyId,
                 ModelId = modelId,
-                DisplayName = attribute.DisplayName,
+                PropertyId = attribute.PropertyId,
+                Type = attribute.Type,
+                DisplayName = attribute.DisplayName ?? propertyName,
                 ChildModelId = attribute.ChildModelId,
                 IsList = attribute.IsList
             };

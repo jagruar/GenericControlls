@@ -1,5 +1,6 @@
 ﻿using PortalCore.Interfaces.Portal;
 using PortalCore.Models.Internal.Attributes;
+using PortalCore.Models.Internal.Types;
 using PortalCore.Models.Internal.Types.Identification;
 using PortalCore.Models.ViewModels.Vehicles;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace PortalCore.Services.ViewModels.Vehicles
     {
         public ModelId ModelId => ModelId.Car;
 
-        [Endpoint(EndpointId.Car_Mine, "Get all cars", "Returns every car in the database")]
+        [Endpoint(EndpointId.Car_GetCars, "Get all cars", "Returns every car in the database")]
         public List<CarViewModel> GetCars()
         {
             return new List<CarViewModel>()
@@ -21,7 +22,7 @@ namespace PortalCore.Services.ViewModels.Vehicles
         }
 
         [Endpoint(EndpointId.Car_Mine, "Car by driver name", "Gets the car driven by the specified driver" )]
-        [Parameter("Driver Name")]
+        [Parameter(ParameterId.Car_Mine_DriverName, "Driver Name", BasicType.String)]
         public CarViewModel Mine(string driverName)
         {
             if (driverName == "Charlie")

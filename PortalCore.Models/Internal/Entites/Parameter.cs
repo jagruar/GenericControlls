@@ -5,7 +5,7 @@ namespace PortalCore.Models.Internal.Entites
 {
     public class Parameter
     {
-        public int ParameterId { get; set; }
+        public ParameterId ParameterId { get; set; }
         public string DisplayName { get; set; }
         public BasicType Type { get; set; }
 
