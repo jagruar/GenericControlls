@@ -2,16 +2,18 @@
 using PortalCore.Models.Internal.Attributes;
 using PortalCore.Models.Internal.Entites;
 using PortalCore.Models.Internal.Types.Identification;
+using System;
 
 namespace PortalCore.Services.Internal.Installation
 {
     public class EntityBuilder : IEntityBuilder
     {
-        public Conditional BuildConditional(ModelId modelId, ConditionalAttribute attribute)
+        public Conditional BuildConditional(string methodName, ModelId modelId, ConditionalAttribute attribute)
         {
             return new Conditional()
             {
                 ModelId = modelId,
+                Name = methodName,
                 ConditionalId = attribute.ConditionalId,
                 DisplayName = attribute.DisplayName,
                 Description = attribute.Description
@@ -30,12 +32,14 @@ namespace PortalCore.Services.Internal.Installation
             };
         }
 
-        public Model BuildModel(ModelAttribute attribute)
+        public Model BuildModel(Type type, ModelAttribute attribute)
         {
             return new Model()
             {
                 ModelId = attribute.ModelId,
-                DisplayName = attribute.DisplayName
+                DisplayName = attribute.DisplayName,
+                Name = type.Name,
+                Namespace = type.Namespace
             };
         }
 
@@ -57,6 +61,7 @@ namespace PortalCore.Services.Internal.Installation
                 ModelId = modelId,
                 PropertyId = attribute.PropertyId,
                 Type = attribute.Type,
+                Name = propertyName,
                 DisplayName = attribute.DisplayName ?? propertyName,
                 ChildModelId = attribute.ChildModelId,
                 IsList = attribute.IsList

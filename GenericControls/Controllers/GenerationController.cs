@@ -64,7 +64,7 @@ namespace PortalCore.Portal.Controllers
                     new LinkControl()
                     {
                         Text = "Backto the garage",
-                        ViewModelService = ModelId.None,
+                        ModelId = ModelId.None,
                         View = "thegarage"
                     },
                 }
@@ -198,7 +198,7 @@ namespace PortalCore.Portal.Controllers
                             {
                                 new LinkControl()
                                 {
-                                    ViewModelService = ModelId.Car,
+                                    ModelId = ModelId.Car,
                                     Method = "Mine",
                                     PrimaryKey = "Name",
                                     View = "mydatapage",

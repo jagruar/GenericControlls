@@ -11,6 +11,11 @@ namespace PortalCore.Models.Internal.Controls
         public ModelId ModelId { get; set; }
 
         /// <summary>
+        /// Used during installation to get method info
+        /// </summary>
+        public EndpointId EndpointId { get; set; }
+
+        /// <summary>
         /// Used to identify the method for retieving the components data
         /// </summary>
         public string Method { get; set; }
@@ -22,6 +27,8 @@ namespace PortalCore.Models.Internal.Controls
 
         public int PartialId { get; set; }
         public string Name { get; set; }
+
+        // needs parameters
 
         public override string Render()
         {

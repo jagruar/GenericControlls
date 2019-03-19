@@ -41,8 +41,7 @@ namespace PortalCore.Services.Internal.Installation
             foreach (IViewModel viewModel in _viewModels)
             {
                 ModelAttribute modelAttribute = GetAttribute<ModelAttribute>(viewModel);
-                Model model = _entityBuilder.BuildModel(modelAttribute);
-                model.Namespace = viewModel.GetType().Namespace;
+                Model model = _entityBuilder.BuildModel(viewModel.GetType(), modelAttribute);
                 _modelRepository.SaveModel(model);
             }
 
@@ -80,7 +79,7 @@ namespace PortalCore.Services.Internal.Installation
             {
                 if (TryGetAttribute(method, out ConditionalAttribute attribute))
                 {
-                    conditionals.Add(_entityBuilder.BuildConditional(modelId,  attribute));
+                    conditionals.Add(_entityBuilder.BuildConditional(method.Name, modelId,  attribute));
                 }
             }
             return conditionals;
@@ -125,6 +124,12 @@ namespace PortalCore.Services.Internal.Installation
         private IEnumerable<T> GetAttributes<T>(MemberInfo m) where T : Attribute
         {
             var attributes = Attribute.GetCustomAttributes(m.GetType(), typeof(T));
+            return attributes.Select(a => (T)a);
+        }
+
+        private IEnumerable<T> GetAttributes<T>(MethodInfo m) where T : Attribute
+        {
+            var attributes = Attribute.GetCustomAttributes(m, typeof(T));
             return attributes.Select(a => (T)a);
         }
     }

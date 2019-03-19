@@ -26,10 +26,5 @@ namespace PortalCore.Models.Internal.Controls
             }
             return output.ToString();
         }
-        //public string RenderContainer()
-        //{
-        //    string output = $"<{Container} class=\"{Classes}\">{Render()}</{Container}>";
-        //    return output;
-        //}
     }
 }

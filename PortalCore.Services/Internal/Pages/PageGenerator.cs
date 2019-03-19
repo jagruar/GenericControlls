@@ -12,10 +12,12 @@ namespace PortalCore.Services.Internal.Pages
     public class PageGenerator : IPageGenerator
     {
         private readonly IPageRepository _pageRepository;
+        private readonly IModelRepository _modelRepository;
 
-        public PageGenerator(IPageRepository pageRepository)
+        public PageGenerator(IPageRepository pageRepository, IModelRepository modelRepository)
         {
             _pageRepository = pageRepository;
+            _modelRepository = modelRepository;
         }
 
         /// <summary>

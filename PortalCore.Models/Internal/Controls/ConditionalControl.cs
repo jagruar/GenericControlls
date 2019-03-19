@@ -1,7 +1,10 @@
-﻿namespace PortalCore.Models.Internal.Controls
+﻿using PortalCore.Models.Internal.Types.Identification;
+
+namespace PortalCore.Models.Internal.Controls
 {
     public class ConditionalControl : BaseControl
     {
+        public ConditionalId ConditionalId { get; set; }
         public string FunctionName { get; set; }
         public bool IsTrue { get; set; }
 

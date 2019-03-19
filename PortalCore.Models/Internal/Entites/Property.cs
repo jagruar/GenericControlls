@@ -7,6 +7,7 @@ namespace PortalCore.Models.Internal.Entites
     {
         public PropertyId PropertyId { get; set; }
         public string DisplayName { get; set; }
+        public string Name { get; set; }
         public BasicType? Type { get; set; }
         public bool IsList { get; set; }
 

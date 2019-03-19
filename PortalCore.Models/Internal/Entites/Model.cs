@@ -7,6 +7,7 @@ namespace PortalCore.Models.Internal.Entites
     {
         public ModelId ModelId { get; set; }
         public string DisplayName { get; set; }
+        public string Name { get; set; }
         public string Namespace { get; set; }
 
         public IEnumerable<Endpoint> Endpoints { get; set; }

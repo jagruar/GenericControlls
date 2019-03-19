@@ -11,7 +11,7 @@ namespace PortalCore.Models.Internal.Controls
         public bool OpenNewPage { get; set; }
         public string ExternalUrl { get; set; }
 
-        public ModelId ViewModelService { get; set; }
+        public ModelId ModelId { get; set; }
         public string Method { get; set; }
         public string View { get; set; }
 
@@ -21,6 +21,7 @@ namespace PortalCore.Models.Internal.Controls
         public string SecondaryKey { get; set; }
         public string PrimaryOption { get; set; }
         public string SecondaryOption { get; set; }
+        // needs datetime
 
         public override string Render()
         {
@@ -34,7 +35,7 @@ namespace PortalCore.Models.Internal.Controls
             {
                 return ExternalUrl;
             }
-            else if (ViewModelService == ModelId.None)
+            else if (ModelId == ModelId.None)
             {
                 return $"~/{View}";
             }
@@ -47,7 +48,7 @@ namespace PortalCore.Models.Internal.Controls
         private string GetQueryString()
         {
             var query = new StringBuilder();
-            query.Append($"~/{ViewModelService}/{Method}?view={View}");
+            query.Append($"~/{ModelId}/{Method}?view={View}");
             query.Append(GetQueryParameter("primaryId", PrimaryId));
             query.Append(GetQueryParameter("secondaryId", SecondaryId));
             query.Append(GetQueryParameter("primaryKey", PrimaryKey));

@@ -92,8 +92,7 @@ namespace PortalCore.DataAccess.Migrations
                 name: "Parameters",
                 columns: table => new
                 {
-                    ParameterId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    ParameterId = table.Column<int>(nullable: false),
                     DisplayName = table.Column<string>(nullable: true),
                     Type = table.Column<int>(nullable: false),
                     EndpointId = table.Column<int>(nullable: false)

@@ -1,5 +1,7 @@
-﻿using PortalCore.Interfaces.Internal.DataAccess;
+﻿using Microsoft.EntityFrameworkCore;
+using PortalCore.Interfaces.Internal.DataAccess;
 using PortalCore.Models.Internal.Entites;
+using PortalCore.Models.Internal.Types.Identification;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -12,6 +14,28 @@ namespace PortalCore.DataAccess.Internal
         public ModelRepository(PagesContext context)
         {
             _context = context;
+        }
+
+        public Conditional GetConditional(ConditionalId conditionalId)
+        {
+            return _context.Conditionals.FirstOrDefault(c => c.ConditionalId == conditionalId);
+        }
+
+        public Endpoint GetEndpoint(EndpointId endpointId)
+        {
+            return _context.Endpoints
+                .Include(e => e.Parameters)
+                .FirstOrDefault(e => e.EndpointId == endpointId);
+        }
+
+        public Model GetModel(ModelId modelId)
+        {
+            return _context.Models.FirstOrDefault(m => m.ModelId == modelId);
+        }
+
+        public Property GetProperty(PropertyId propertyId)
+        {
+            return _context.Properties.FirstOrDefault(p => p.PropertyId == propertyId);
         }
 
         public void SaveConditionals(IEnumerable<Conditional> conditionals)
