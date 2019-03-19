@@ -1,4 +1,5 @@
-﻿using PortalCore.Models.Internal.Types;
+﻿using PortalCore.Models.Internal.Pages;
+using PortalCore.Models.Internal.Types;
 using PortalCore.Models.Internal.Types.Identification;
 using System;
 using System.Text;
@@ -15,12 +16,14 @@ namespace PortalCore.Models.Internal.Controls
         public string Method { get; set; }
         public string View { get; set; }
 
-        public string PrimaryId { get; set; }
-        public string SecondaryId { get; set; }
-        public string PrimaryKey { get; set; }
-        public string SecondaryKey { get; set; }
-        public string PrimaryOption { get; set; }
-        public string SecondaryOption { get; set; }
+        public ParameterString PrimaryInt { get; set; }
+        public ParameterString SecondaryInt { get; set; }
+        public ParameterString PrimaryString { get; set; }
+        public ParameterString SecondaryString { get; set; }
+        public ParameterString PrimaryBool { get; set; }
+        public ParameterString SecondaryBool { get; set; }
+        public ParameterString PrimaryDateTime { get; set; }
+        public ParameterString SecondaryDateTime { get; set; }
         // needs datetime
 
         public override string Render()
@@ -49,20 +52,29 @@ namespace PortalCore.Models.Internal.Controls
         {
             var query = new StringBuilder();
             query.Append($"~/{ModelId}/{Method}?view={View}");
-            query.Append(GetQueryParameter("primaryId", PrimaryId));
-            query.Append(GetQueryParameter("secondaryId", SecondaryId));
-            query.Append(GetQueryParameter("primaryKey", PrimaryKey));
-            query.Append(GetQueryParameter("secondaryKey", SecondaryKey));
-            query.Append(GetQueryParameter("primaryOption", PrimaryOption));
-            query.Append(GetQueryParameter("secondaryOption", SecondaryOption));
+            query.Append(GetQueryParameter("primaryId", PrimaryInt));
+            query.Append(GetQueryParameter("secondaryId", SecondaryInt));
+            query.Append(GetQueryParameter("primaryKey", PrimaryString));
+            query.Append(GetQueryParameter("secondaryKey", SecondaryString));
+            query.Append(GetQueryParameter("primaryOption", PrimaryBool));
+            query.Append(GetQueryParameter("secondaryOption", SecondaryBool));
+            query.Append(GetQueryParameter("primaryDateTime", PrimaryDateTime));
+            query.Append(GetQueryParameter("secondaryDateTime", SecondaryDateTime));
             return query.ToString();
         }
 
-        private string GetQueryParameter(string parameterName, string parameter)
+        private string GetQueryParameter(string parameterName, ParameterString parameter)
         {
-            if (!string.IsNullOrEmpty(parameter))
+            if (parameter != null)
             {
-                return $"&{parameterName}=@{Model}.{parameter}";
+                if (parameter.IsFromModel)
+                {
+                    return $"&{parameterName}=@{Model}.{parameter.Value}";
+                }
+                else
+                {
+                    return $"&{parameterName}={parameter.Value}";
+                }                
             }
             else
             {

@@ -4,6 +4,7 @@ using PortalCore.Models.Internal.Controls;
 using PortalCore.Models.Internal.Entites;
 using PortalCore.Models.Internal.Pages;
 using PortalCore.Models.Internal.Types;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -12,11 +13,13 @@ namespace PortalCore.Services.Internal.Pages
     public class PageGenerator : IPageGenerator
     {
         private readonly IPageRepository _pageRepository;
+        private readonly IControlFactory _controlFactory;
         private readonly IModelRepository _modelRepository;
 
-        public PageGenerator(IPageRepository pageRepository, IModelRepository modelRepository)
+        public PageGenerator(IPageRepository pageRepository, IControlFactory controlFactory, IModelRepository modelRepository)
         {
             _pageRepository = pageRepository;
+            _controlFactory = controlFactory;
             _modelRepository = modelRepository;
         }
 
@@ -26,13 +29,15 @@ namespace PortalCore.Services.Internal.Pages
         /// </summary>
         public Page GeneratePage(PageGenerationModel page)
         {
+            page.Controls = _controlFactory.BuildControls(page.ControlConfigs);
             GenerateChildPages(page.Controls);
 
             var razor = new StringBuilder();
 
             if (page.Page.PageType == PageType.Partial)
             {
-                //razor.AppendLine($"@model {page.Page.Namespace}.{page.Page.Model}");
+                Model model = _modelRepository.GetModel(page.Page.ModelId.Value);
+                razor.AppendLine($"@model {model.Namespace}.{model.Name}");
                 NameModels(page.Controls, "Model");
             }
 
@@ -136,7 +141,7 @@ namespace PortalCore.Services.Internal.Pages
         /// <summary>
         /// Runs through the model and generates all partial pages required
         /// </summary>
-        public void GenerateChildPages(List<IControl> controls)
+        private void GenerateChildPages(List<IControl> controls)
         {
             if (controls != null)
             {

@@ -11,8 +11,14 @@ namespace PortalCore.Models.Internal.Types
         Model = 3,
         List = 4,
         Property = 5,
-        Function = 6,
+        //Function = 6,
         Conditional = 7,
-        Form = 8
+        //Form = 8,
+        Link = 9,
+        Html = 10,
+        Text = 11,
+        RenderBody = 12,
+        ListItem = 13,
+
     }
 }

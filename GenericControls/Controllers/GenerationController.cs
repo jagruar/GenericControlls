@@ -41,33 +41,35 @@ namespace PortalCore.Portal.Controllers
                     Name = "mydatapage",
                     ModelId = ModelId.Car
                 },
-                Controls = new List<IControl>()
+                ControlConfigs = new List<ControlConfig>()
                 {
-                    new ListControl()
+                    new ControlConfig()
                     {
                         ControlType = ControlType.List,
-                        ListName = "Passengers",
-                        ItemName = "Passenger",
-                        ChildControls = new List<IControl>()
+                        PropertyId = PropertyId.Car_Passengers,
+                        ChildControlConfigs = new List<ControlConfig>()
                         {
-                            new ListItemControl()
+                            new ControlConfig()
                             {
-                            HtmlElement = "p"
+                                ControlType = ControlType.ListItem,
+                                HtmlElement = "p"
                             }
                         }                        
                     },
-                    new PropertyControl()
+                    new ControlConfig()
                     {
-                        HtmlElement = "p",
-                        Property = "NumberPlate"
+                        ControlType = ControlType.Property,
+                        PropertyId = PropertyId.Car_NumberPlate,
+                        HtmlElement = "p"
                     },
-                    new LinkControl()
+                    new ControlConfig()
                     {
-                        Text = "Backto the garage",
+                        ControlType = ControlType.Link,
                         ModelId = ModelId.None,
-                        View = "thegarage"
-                    },
-                }
+                        View = "thegarage",
+                        Text = "Back to the garage"
+                    }
+                }                
             };            
         }
 
@@ -82,10 +84,11 @@ namespace PortalCore.Portal.Controllers
                     ReservedPage = ReservedPage.NotFound,
                     MasterPageId = masterId,
                 },
-                Controls = new List<IControl>()
+                ControlConfigs = new List<ControlConfig>()
                 {
-                    new TextControl()
+                    new ControlConfig()
                     {
+                        ControlType = ControlType.Text,
                         Text = "Fucked it m8"
                     }
                 }
@@ -103,11 +106,12 @@ namespace PortalCore.Portal.Controllers
                     ReservedPage = ReservedPage.InternalError,
                     MasterPageId = masterId,
                 },
-                Controls = new List<IControl>()
+                ControlConfigs = new List<ControlConfig>()
                 {
-                    new TextControl()
+                    new ControlConfig()
                     {
-                        Text = "You fucked with the query string didn't you"
+                        ControlType = ControlType.Text,
+                        Text = "Fucked with query string"
                     }
                 }
             };
@@ -121,30 +125,16 @@ namespace PortalCore.Portal.Controllers
                 MasterPageId = 0,
                 Name = "MyMaster"
             },
-            Controls = new List<IControl>()
+            ControlConfigs = new List<ControlConfig>()
             {
-                new HtmlControl()
+                new ControlConfig()
                 {
-                    HtmlElement = "h1",
-                    ChildControls = new List<IControl>()
-                    {
-                        new TextControl()
-                        {
-                            Text = "This is from my master page"
-                        }
-                    }
+                    ControlType = ControlType.Text,
+                    Text = "From master"
                 },
-                new RenderBodyControl(),
-                new HtmlControl()
+                new ControlConfig()
                 {
-                    HtmlElement = "h1",
-                    ChildControls = new List<IControl>()
-                    {
-                        new TextControl()
-                        {
-                            Text = "This is also from my master page"
-                        }
-                    }
+                    ControlType = ControlType.RenderBody
                 }
             }
         };
@@ -159,118 +149,92 @@ namespace PortalCore.Portal.Controllers
                     MasterPageId = masterId,
                     Name = "The Garage",
                 },
-                Controls = new List<IControl>()
-            {
-                new HtmlControl()
+                ControlConfigs = new List<ControlConfig>()
                 {
-                    HtmlElement = "h1",
-                    ChildControls = new List<IControl>()
+                    new ControlConfig()
                     {
-                        new TextControl()
-                        {
-                            Text = "This displays a list of cars!"
-                        }
-                    }
-                },
-                new LinkControl()
-                {
-                    Text = "Gooooooogle",
-                    OpenNewPage = true,
-                    ExternalUrl = "https://www.google.co.uk/"
-                },
-
-                new DataModelControl()
-                {
-                    ControlType = ControlType.ListDataModel,
-                    ModelId = ModelId.Car,
-                    Method = "GetCars",
-                    Name = "All Cars",
-                    Namespace = "PortalCore.Models.ViewModels.Vehicles",
-                    Model = "CarViewModel",
-                    ChildControls = new List<IControl>()
+                        ControlType = ControlType.Link,
+                        OpenNewPage = true,
+                        ExternalUrl = "https://www.google.co.uk/"
+                    },
+                    new ControlConfig()
                     {
-
-                        new ModelControl()
+                        ControlType = ControlType.Text,
+                        Text = "List of cars below"
+                    },
+                    new ControlConfig()
+                    {
+                        ControlType = ControlType.ListDataModel,
+                        ModelId = ModelId.Car,
+                        EndpointId = EndpointId.Car_GetCars,
+                        PartialName = "My Cars",
+                        ChildControlConfigs = new List<ControlConfig>()
                         {
-                            ControlType = ControlType.Model,
-                            Model = "Driver",
-                            ChildControls = new List<IControl>()
+                            new ControlConfig()
                             {
-                                new LinkControl()
+                                ControlType = ControlType.Model,
+                                PropertyId = PropertyId.Car_Driver,
+                                ChildControlConfigs = new List<ControlConfig>()
                                 {
-                                    ModelId = ModelId.Car,
-                                    Method = "Mine",
-                                    PrimaryKey = "Name",
-                                    View = "mydatapage",
-                                    Text = "View this car"
-                                },
-                                new PropertyControl()
-                                {
-                                    HtmlElement = "p",
-                                    Property = "Name"
-                                },
-                                new PropertyControl()
-                                {
-                                    HtmlElement = "p",
-                                    Property = "Age"
-                                }
-                            }
-                        },
-                        new ConditionalControl()
-                        {
-                            FunctionName = "IsSafe",
-                            IsTrue = true,
-                            ChildControls = new List<IControl>()
-                            {
-                                new HtmlControl()
-                                {
-                                    HtmlElement = "h4",
-                                    ChildControls = new List<IControl>()
+                                    new ControlConfig()
                                     {
-                                        new TextControl()
+                                        ControlType = ControlType.Property,
+                                        PropertyId = PropertyId.Driver_Name,
+                                        HtmlElement = "p"
+                                    },
+                                    new ControlConfig()
+                                    {
+                                        ControlType = ControlType.Link,
+                                        ModelId = ModelId.Car,
+                                        EndpointId = EndpointId.Car_Mine,
+                                        View = "mydatapage",
+                                        Text = "View this car",
+                                        PrimaryString = new ParameterValue()
                                         {
-                                            Text = "This geezer has safe tyres"
-                                        }
+                                            PropertyId = PropertyId.Driver_Name
+                                        }                                        
                                     }
                                 }
-                            }
-                        },
-                        new ConditionalControl()
-                        {
-                            FunctionName = "IsSafe",
-                            IsTrue = false,
-                            ChildControls = new List<IControl>()
+                            },
+                            new ControlConfig()
                             {
-                                new HtmlControl()
+                                ControlType = ControlType.List,
+                                PropertyId = PropertyId.Car_Tyres,
+                                ChildControlConfigs = new List<ControlConfig>()
                                 {
-                                    HtmlElement = "h4",
-                                    ChildControls = new List<IControl>()
+                                    new ControlConfig()
                                     {
-                                        new TextControl()
-                                        {
-                                            Text = "This geezer is Crazy!"
-                                        }
+                                        ControlType = ControlType.Property,
+                                        PropertyId = PropertyId.Tyre_Pressure,
+                                        HtmlElement = "p"
                                     }
                                 }
-                            }
-                        },
-                        new ListControl()
-                        {
-                            ControlType = ControlType.List,
-                            ListName = "Tyres",
-                            ItemName = "Tyre",
-                            ChildControls = new List<IControl>()
+                            },
+                            new ControlConfig()
                             {
-                                new PropertyControl()
+                                ControlType = ControlType.Conditional,
+                                ConditionalId = ConditionalId.Car_IsSafe,
+                                IsTrue = false,
+                                ChildControlConfigs = new List<ControlConfig>()
                                 {
-                                    HtmlElement = "p",
-                                    Property = "Pressure",
-                                }
+                                    new ControlConfig()
+                                    {
+                                        ControlType = ControlType.Html,
+                                        HtmlElement = "p",
+                                        ChildControlConfigs = new List<ControlConfig>()
+                                        {
+                                            new ControlConfig()
+                                            {
+                                                ControlType = ControlType.Text,
+                                                Text = "This car is unsafe"
+                                            }
+                                        }
+                                    }                                    
+                                }                                
                             }
                         }
                     }
-                }
-            }
+                }                
             };            
         }
     }
