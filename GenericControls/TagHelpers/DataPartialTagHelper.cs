@@ -3,13 +3,12 @@ using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Mvc.ViewFeatures.Internal;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using PortalCore.Helpers;
 using PortalCore.Interfaces.Internal.DataAccess;
 using PortalCore.Interfaces.Portal;
-using PortalCore.Models.Internal.Types;
 using PortalCore.Models.Internal.Types.Identification;
 using System;
 using System.IO;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,7 +16,7 @@ namespace PortalCore.Portal.TagHelpers
 {
     public class DataPartialTagHelper : TagHelper
     {
-        private readonly Func<ModelId, IViewModelService> _viewModelFactory;
+        private readonly IModelService _modelService;
         private readonly IPageRepository _pageRepository;
         private readonly ICompositeViewEngine _viewEngine;
         private readonly IViewBufferScope _viewBufferScope;
@@ -26,17 +25,27 @@ namespace PortalCore.Portal.TagHelpers
         public ModelId ModelType { get; set; }
         public string Action { get; set; }
 
+        // Parameters
+        public int? PrimaryId { get; set; }
+        public int? SecondaryId { get; set; }
+        public string PrimaryKey { get; set; }
+        public string SecondaryKey { get; set; }
+        public bool? PrimaryOption { get; set; }
+        public bool? SecondaryOption { get; set; }
+        public DateTime? PrimaryDateTime { get; set; }
+        public DateTime? SecondaryDateTime { get; set; }
+
         [HtmlAttributeNotBound]
         [ViewContext]
         public ViewContext ViewContext { get; set; }
 
         public DataPartialTagHelper(
-            Func<ModelId, IViewModelService> viewModelFactory,
+            IModelService modelService,
             IPageRepository pageRepository,
             ICompositeViewEngine viewEngine,
             IViewBufferScope viewBufferScope)
         {
-            _viewModelFactory = viewModelFactory;
+            _modelService = modelService;
             _pageRepository = pageRepository;
             _viewEngine = viewEngine;
             _viewBufferScope = viewBufferScope;
@@ -61,10 +70,18 @@ namespace PortalCore.Portal.TagHelpers
             {
                 return null;
             }
-            IViewModelService modelService = _viewModelFactory(ModelType);
-            Type serviceType = modelService.GetType();
-            MethodInfo method = serviceType.GetMethod(Action);
-            return method.Invoke(modelService, null);
+
+            object[] parameters = ParameterHelper.GetParameters(
+                PrimaryId,
+                SecondaryId,
+                PrimaryKey,
+                SecondaryKey,
+                PrimaryOption,
+                SecondaryOption,
+                PrimaryDateTime,
+                SecondaryDateTime);
+
+            return _modelService.GetViewModel(ModelType, Action, parameters);
         }
 
         private async Task RenderPartialViewAsync(TextWriter writer, object model, IView view)

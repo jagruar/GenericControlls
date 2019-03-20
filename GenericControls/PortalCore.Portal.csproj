@@ -17,9 +17,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PortalCore.DataAccess\PortalCore.DataAccess.csproj" />
+    <ProjectReference Include="..\PortalCore.Helpers\PortalCore.Helpers.csproj" />
     <ProjectReference Include="..\PortalCore.Interfaces\PortalCore.Interfaces.csproj" />
+    <ProjectReference Include="..\PortalCore.Ioc\PortalCore.Ioc.csproj" />
     <ProjectReference Include="..\PortalCore.Models\PortalCore.Models.csproj" />
-    <ProjectReference Include="..\PortalCore.Services\PortalCore.Services.csproj" />
   </ItemGroup>
 
 </Project>

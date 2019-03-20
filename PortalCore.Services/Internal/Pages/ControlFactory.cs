@@ -120,7 +120,15 @@ namespace PortalCore.Services.Internal.Pages
                 Model = model.Name,
                 EndpointId = endpoint.EndpointId,
                 Method = endpoint.Method,
-                Classes = controlConfig.Classes               
+                Classes = controlConfig.Classes,
+                PrimaryInt = GetParameterString(controlConfig.PrimaryInt, BasicType.Int),
+                SecondaryInt = GetParameterString(controlConfig.SecondaryInt, BasicType.Int),
+                PrimaryString = GetParameterString(controlConfig.PrimaryString, BasicType.String),
+                SecondaryString = GetParameterString(controlConfig.SecondaryString, BasicType.String),
+                PrimaryBool = GetParameterString(controlConfig.PrimaryBool, BasicType.Bool),
+                SecondaryBool = GetParameterString(controlConfig.SecondaryBool, BasicType.Bool),
+                PrimaryDateTime = GetParameterString(controlConfig.PrimaryDateTime, BasicType.DateTime),
+                SecondaryDateTime = GetParameterString(controlConfig.SecondaryDateTime, BasicType.DateTime)
             };
         }
 

@@ -13,7 +13,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortalCore.Services", "Port
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortalCore.DataAccess", "PortalCore.DataAccess\PortalCore.DataAccess.csproj", "{149FB14C-3792-4CE6-A80A-D9A39CD0286F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PortalCore.Admin", "PortalCore.Admin\PortalCore.Admin.csproj", "{9AD65F2B-5AB8-44FD-8A52-3609F697438E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortalCore.Admin", "PortalCore.Admin\PortalCore.Admin.csproj", "{9AD65F2B-5AB8-44FD-8A52-3609F697438E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PortalCore.WebFramework", "PortalCore.WebFramework\PortalCore.WebFramework.csproj", "{238EAE92-4436-418E-9F31-F14134EC231F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PortalCore.Ioc", "PortalCore.Ioc\PortalCore.Ioc.csproj", "{54993130-158E-4C72-95FD-C8470A6EBCB7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PortalCore.Helpers", "PortalCore.Helpers\PortalCore.Helpers.csproj", "{1C2481A2-2E6B-4764-8634-DD5A3011C53E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +51,18 @@ Global
 		{9AD65F2B-5AB8-44FD-8A52-3609F697438E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9AD65F2B-5AB8-44FD-8A52-3609F697438E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9AD65F2B-5AB8-44FD-8A52-3609F697438E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{238EAE92-4436-418E-9F31-F14134EC231F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{238EAE92-4436-418E-9F31-F14134EC231F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{238EAE92-4436-418E-9F31-F14134EC231F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{238EAE92-4436-418E-9F31-F14134EC231F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54993130-158E-4C72-95FD-C8470A6EBCB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54993130-158E-4C72-95FD-C8470A6EBCB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54993130-158E-4C72-95FD-C8470A6EBCB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54993130-158E-4C72-95FD-C8470A6EBCB7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C2481A2-2E6B-4764-8634-DD5A3011C53E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C2481A2-2E6B-4764-8634-DD5A3011C53E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C2481A2-2E6B-4764-8634-DD5A3011C53E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C2481A2-2E6B-4764-8634-DD5A3011C53E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

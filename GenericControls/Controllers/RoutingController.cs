@@ -1,21 +1,26 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PortalCore.Helpers;
 using PortalCore.Interfaces.Portal;
 using PortalCore.Models.Internal.Types;
 using PortalCore.Models.Internal.Types.Identification;
 using System;
-using System.Collections.Generic;
-using System.Reflection;
 
 namespace PortalCore.Portal.Controllers
 {
     [Route("")]
     public class RoutingController : Controller
     {
-        private readonly Func<ModelId, IViewModelService> _viewModelServiceFactory;
+        private readonly IModelService _modelService;
 
-        public RoutingController(Func<ModelId, IViewModelService> viewModelFactory)
+        public RoutingController(IModelService modelService)
         {
-            _viewModelServiceFactory = viewModelFactory;
+            _modelService = modelService;
+        }
+
+        [HttpGet("")]
+        public IActionResult Home()
+        {
+            return View("home");
         }
 
         [HttpGet("/{url}")]
@@ -24,74 +29,45 @@ namespace PortalCore.Portal.Controllers
             return View(url.ToLower());
         }
 
-        [HttpGet("/{serviceType}/{method}")]
-        public IActionResult DataView(
+        [HttpGet("async/{modelId}/{method}")]
+        public object PostData(ModelId modelId, string method, [FromBody] object model)
+        {
+            return _modelService.ProcessModel(modelId, method, model);
+        }
+
+        [HttpGet("/{modelId}/{method}")]
+        public IActionResult GetViewData(
             [FromQuery]string view, 
-            ModelId serviceType,
+            ModelId modelId,
             string method,
             [FromQuery]int? primaryId,
             [FromQuery]int? secondaryId,
             [FromQuery]string primaryKey,
             [FromQuery]string secondaryKey,
             [FromQuery]bool? primaryOption,
-            [FromQuery]bool? secondaryOption)
+            [FromQuery]bool? secondaryOption,
+            [FromQuery]DateTime? primaryDateTime,
+            [FromQuery]DateTime? secondaryDateTime)
         {
-            object[] parametersArray = GetParameters(
+            object[] parameters = ParameterHelper.GetParameters(
                 primaryId, 
                 secondaryId, 
                 primaryKey,
                 secondaryKey,
                 primaryOption,
-                secondaryOption);
+                secondaryOption,
+                primaryDateTime,
+                secondaryDateTime);
             
             try
             {
-                IViewModelService modelService = _viewModelServiceFactory(serviceType);
-                Type typeOfService = modelService.GetType();
-                MethodInfo methodInfo = typeOfService.GetMethod(method);
-                object viewModel = methodInfo.Invoke(modelService, parametersArray);
+                object viewModel = _modelService.GetViewModel(modelId, method, parameters);
                 return View(view.ToLower(), viewModel);
             }
             catch
             {
                 return View(ReservedPage.InternalError.ToString());
             }            
-        }
-
-        private object[] GetParameters(
-            int? primaryId, 
-            int? secondaryId,
-            string primaryKey,
-            string secondaryKey,
-            bool? primaryOption,
-            bool? secondaryOption)
-        {
-            var parameters = new List<object>();
-            if (primaryId.HasValue)
-            {
-                parameters.Add(primaryId.Value);
-            }
-            if (secondaryId.HasValue)
-            {
-                parameters.Add(secondaryId.Value);
-            }
-            if (!string.IsNullOrEmpty(primaryKey))
-            {
-                parameters.Add(primaryKey);
-            }
-            if (!string.IsNullOrEmpty(secondaryKey))
-            {
-                parameters.Add(secondaryKey);
-            }
-            if (primaryOption.HasValue)
-            {
-                parameters.Add(primaryOption.Value);
-            }
-            if (secondaryOption.HasValue)
-            {
-                parameters.Add(secondaryOption.Value);
-            }
-            return parameters.ToArray();
-        }
+        }        
     }
 }

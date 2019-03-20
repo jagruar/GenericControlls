@@ -6,18 +6,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PortalCore.DataAccess;
-using PortalCore.DataAccess.Internal;
-using PortalCore.Interfaces.Internal;
 using PortalCore.Interfaces.Internal.DataAccess;
-using PortalCore.Interfaces.Portal;
-using PortalCore.Models.Internal.Types;
-using PortalCore.Models.Internal.Types.Identification;
+using PortalCore.Ioc;
 using PortalCore.Portal.Mvc.FileProviders;
-using PortalCore.Services.Internal.Pages;
-using PortalCore.Services.ViewModels.Buildings;
-using PortalCore.Services.ViewModels.Vehicles;
-using System;
-using System.Collections.Generic;
 
 namespace PortalCore.Portal
 {
@@ -40,6 +31,8 @@ namespace PortalCore.Portal
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            ServiceConfiguration.ConfigurePageStore(services);
+
             services.AddDbContext<PagesContext>(
                 options =>
                 {
@@ -48,42 +41,16 @@ namespace PortalCore.Portal
                         sqlServerOptions => sqlServerOptions.MigrationsAssembly("PortalCore.DataAccess"));
                 });
 
-
-            services.AddTransient<IPageGenerator, PageGenerator>();
-            services.AddTransient<IPageRepository, PageRepository>();
-            services.AddTransient<IModelRepository, ModelRepository>();
-            services.AddTransient<IControlFactory, ControlFactory>();
-
-            services.AddTransient<CarViewModelService>();
-            services.AddTransient<HouseViewModelService>();
-            services.AddTransient<Func<ModelId, IViewModelService>>(serviceProvider => key =>
-            {
-                switch (key)
-                {
-                    case (ModelId.Car):
-                        return serviceProvider.GetService<CarViewModelService>();
-                    case (ModelId.House):
-                        return serviceProvider.GetService<HouseViewModelService>();
-                    default:
-                        throw new KeyNotFoundException();
-                }
-            });
-
-            var sp = services.BuildServiceProvider();
+            var tempServicePropvider = services.BuildServiceProvider();
 
             services.AddMvc();
             services.Configure<RazorViewEngineOptions>(options =>
             {
                 options.ViewLocationFormats.Add("{0}" + RazorViewEngine.ViewExtension);
-                options.FileProviders.Add(new DatabaseFileProvider(sp.GetService<IPageRepository>()));
+                options.FileProviders.Add(new DatabaseFileProvider(tempServicePropvider.GetService<IPageRepository>()));
             });
 
-                //SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-                //.AddViewOptions(options =>
-                //{
-                //    options.ViewEngines.Clear();
-                //    options.ViewEngines.Add(new CustomViewEngine(sp.GetService<IPageRepository>()));
-                //});
+            ServiceConfiguration.ConfigureServices(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

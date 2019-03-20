@@ -24,7 +24,6 @@ namespace PortalCore.Models.Internal.Controls
         public ParameterString SecondaryBool { get; set; }
         public ParameterString PrimaryDateTime { get; set; }
         public ParameterString SecondaryDateTime { get; set; }
-        // needs datetime
 
         public override string Render()
         {
